@@ -1,0 +1,38 @@
+.sidenav-container {
+  height: 100%;
+  background-color: white;
+}
+
+button{
+  background-color: #1AB394 !important;
+  color: white;
+  border-radius: 3px;
+}
+
+a{
+  color: white;
+}
+
+a:hover{
+  background-color: #1ca587;
+}
+
+span{
+  font-size: 1.2rem;
+}
+
+.sidenav {
+  width: 200px;
+  background-color: #293846;
+  border-radius: 0px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

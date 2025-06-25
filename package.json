@@ -1,0 +1,14 @@
+{
+  "name": "bug-tracker",
+  "version": "1.0.0",
+  "description": "Bug tracking application with Node.js backend and Angular frontend",
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "start:backend": "cd backend && npm run start",
+    "start:frontend": "cd frontend && npm start",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

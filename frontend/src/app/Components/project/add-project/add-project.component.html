@@ -1,0 +1,33 @@
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Project Name:</mat-label>
+            <input type="text" matInput formControlName="name" placeholder="Enter project name" required>
+            <mat-error *ngIf="projectForm.get('name')?.hasError('required')">
+                Project name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Project Description:</mat-label>
+            <textarea type="text" matInput formControlName="description" placeholder="Enter project Description" required></textarea>
+            <mat-error *ngIf="projectForm.get('description')?.hasError('required')">
+                Project Description is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Select Memebers</mat-label>
+            <mat-select formControlName="members" multiple>
+                <mat-option *ngFor="let user of userData" [value]="user._id">
+                    {{user.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <button type="submit" class="btn text-white" style="background-color: #1AB394">Submit</button>
+    </div>
+</form>

@@ -1,0 +1,62 @@
+<div>
+    <div>
+        <form [formGroup]="regForm" (ngSubmit)="submitForm()">
+            <div class="mt-5">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Name</mat-label>
+                    <input type="text" matInput formControlName="name" placeholder="John Cena">
+                    <mat-error *ngIf="regForm.get('name')?.hasError('required')">
+                        Name is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mt-5">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com">
+                    <mat-error *ngIf="regForm.get('email')?.hasError('required')">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="regForm.get('email')?.hasError('email')">
+                        Enter email <strong>properly</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mt-5">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput formControlName="password" placeholder="Ex. pat@example.com">
+                    <!-- <mat-hint align="end">
+                        {{ regForm.get('password')?.value?.length || 0 }}/8
+                    </mat-hint> -->
+                    <mat-error *ngIf="regForm.get('password')?.hasError('required')">
+                        Password is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="regForm.get('password')?.hasError('minlength')">
+                        Password must be at least <strong>4 characters</strong>
+                    </mat-error>
+                    <mat-error *ngIf="regForm.get('password')?.hasError('pattern')">
+                        Password must include <strong>1 uppercase</strong> and <strong>1 number</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mt-5">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Username</mat-label>
+                    <input type="text" matInput formControlName="username" placeholder="john">
+                    <mat-error *ngIf="regForm.get('username')?.hasError('required')">
+                        Username is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="regForm.get('username')?.hasError('usernameTaken')">
+                        Username is <strong>already picked up. Try anothe one</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mt-5">
+                <button mat-raised-button class="ms-2" color="primary" type="submit" [disabled]="regForm.invalid">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

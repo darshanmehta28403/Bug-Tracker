@@ -1,0 +1,35 @@
+<div>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+      <mat-toolbar class="text-white">Menu</mat-toolbar>
+      <mat-nav-list>
+        <a class="d-block p-3 text-decoration-none" routerLink="/">Home</a>
+        <a class="d-block p-3 text-decoration-none" routerLink="/bugs">Bugs</a>
+        <a class="d-block p-3 text-decoration-none" routerLink="/project">Projects</a>
+        <a class="d-block p-3 text-decoration-none" routerLink="/user">Users</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <div class="row me-0 w-100">
+          <div class="col-6">
+            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+          </div>
+          <div class="col-6 d-flex justify-content-end">
+            <button class="btn text-white">
+              <mat-icon *ngIf="isLoggedIn" aria-hidden="false" aria-label="Example home icon" fontIcon="person" routerLink="/profile"></mat-icon>
+              <span *ngIf="!isLoggedIn" routerLink="/signin">Login</span>
+            </button>
+          </div>
+        </div>
+      </mat-toolbar>
+      <!-- Add Content Here -->
+      <div class="m-3">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
