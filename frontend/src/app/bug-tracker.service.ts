@@ -10,17 +10,16 @@ export class BugTrackerService {
   readonly dialog = inject(MatDialog);
 
   // user and login
-  private getUserDataUrl = 'http://localhost:5000/api/users/';
-  private postUserDataUrl = 'http://localhost:5000/api/auth/register';
-  private loginUserDataUrl = 'http://localhost:5000/api/auth/login';
+  private getUserDataUrl = 'http://localhost:5557/api/user/';
+  private postUserDataUrl = 'http://localhost:5557/api/user';
+  private loginUserDataUrl = 'http://localhost:5557/api/user/login';
 
   //project
-  private getProjectDataUrl = 'http://localhost:5000/api/projects/';
-  private deleteProjectUrl = 'http://localhost:5000/api/projects/{id}';
-  private postProjectUrl = 'http://localhost:5000/api/projects';
-  private deleteProjectMembers = 'http://localhost:5000/api/projects/{pid}/members/{mid}'
+  private getProjectDataUrl = 'http://localhost:5557/api/projects/';
+  private deleteProjectUrl = 'http://localhost:5557/api/projects/{id}';
+  private postProjectUrl = 'http://localhost:5557/api/projects';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   openDialogue(msg: string) {
     this.dialog.open(DialogBoxComponent, {
@@ -58,11 +57,5 @@ export class BugTrackerService {
   getProjectById(id: string): Observable<any> {
     const url = this.deleteProjectUrl.replace('{id}', id);
     return this.http.get<any>(url);
-  }
-
-  deleteProjectMember(pid: string, mid: string): Observable<any> {
-    let url = this.deleteProjectMembers.replace('{pid}',pid);
-    url = url.replace('{mid}',mid);
-    return this.http.delete<any>(url);
   }
 }
