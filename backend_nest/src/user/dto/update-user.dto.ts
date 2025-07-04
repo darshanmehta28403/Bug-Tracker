@@ -1,12 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsOptional, IsString } from "class-validator";
-
-export enum UserType {
-  ADMIN = 'admin',
-  DEVELOPER = 'developer',
-  QA = 'qa',
-  INTERN = 'intern',
-}
+import { UserType } from "../userEnums";
 
 export class UpdateUserDto {
   @ApiProperty()
@@ -32,11 +26,10 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  role: string;
+  designation: string;
 
   @ApiProperty()
-  @IsString()
   @IsOptional()
   @IsEnum(UserType, { message: 'type must be one of: admin, developer, qa, intern' })
-  type: string;
+  role: UserType;
 }

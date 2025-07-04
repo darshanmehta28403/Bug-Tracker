@@ -1,18 +1,17 @@
-import { Injectable } from '@nestjs/common';
 import { Comment, CommentDocument } from './comment.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateCommentDto } from './dto/create-Comment.dto';
 import { UpdateCommentDto } from './dto/update-Comment.dto';
+import { PaginationDto } from './dto/pagination.dto';
 
-@Injectable()
-export class CommentRepoService {
+export class CommentRepo {
   constructor(@InjectModel(Comment.name) private commentModel: Model<CommentDocument>) { }
 
-  async findAllPaginated(query: any) {
+  async findAllPaginated(query: PaginationDto) {
     const skip = (query.page - 1) * query.limit;
     const [Comments, totalComments] = await Promise.all([
-      this.commentModel.find().skip(skip).limit(query.limit).exec(),
+      this.commentModel.find().populate('author', 'name id').skip(skip).limit(query.limit).exec(),
       this.commentModel.countDocuments().exec()
     ]);
     return {

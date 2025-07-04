@@ -1,20 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsOptional } from "class-validator";
 import { IsEnum, IsString } from 'class-validator';
-
-export enum Severity {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  SEVERE = 'severe',
-}
-
-export enum Status {
-  OPEN = 'open',
-  IN_PROGRESS = 'in-progress',
-  RESOLVED = 'resolved',
-  POSTPONED = 'postponed',
-}
+import { Severity, Status } from "../bugEnums";
 
 export class UpdateBugDto {
   @ApiProperty()
@@ -28,16 +15,14 @@ export class UpdateBugDto {
   description: string;
 
   @ApiProperty()
-  @IsString()
   @IsOptional()
   @IsEnum(Severity, { message: 'type must be one of: low, medium, high, severe' })
-  severity: string;
+  severity: Severity;
 
   @ApiProperty()
-  @IsString()
   @IsOptional()
   @IsEnum(Status, { message: 'type must be one of: open, in-progress, resolved, postponed' })
-  status: string;
+  status: Status;
 
   @ApiProperty()
   @IsMongoId()

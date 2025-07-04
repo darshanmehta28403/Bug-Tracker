@@ -8,14 +8,13 @@ async function bootstrap() {
   app.enableCors();
 
   // Enable validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const config = new DocumentBuilder()
     .setTitle('User API')
     .setDescription('A comprehensive API for User')
     .setVersion('1.0')
     .addBearerAuth()
-    .addTag('User', 'User management endpoints')
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

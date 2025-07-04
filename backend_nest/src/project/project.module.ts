@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
-import { ProjectRepoService } from './project.repo.service';
+import { ProjectRepo } from './ProjectRepo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from './project.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from 'src/jwt.strategy';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]), JwtModule.register({
@@ -21,6 +22,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   })],
   controllers: [ProjectController],
-  providers: [ProjectService, ProjectRepoService],
+  providers: [ProjectService, ProjectRepo, JwtStrategy],
 })
 export class ProjectModule { }

@@ -1,15 +1,14 @@
-import { Injectable } from '@nestjs/common';
 import { User, UserDocument } from './user.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PaginationDto } from './dto/pagination.dto';
 
-@Injectable()
-export class UserRepoService {
+export class UserRepo {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
-  async findAllPaginated(query: any) {
+  async findAllPaginated(query: PaginationDto) {
     const skip = (query.page - 1) * query.limit;
     const [users, totalUsers] = await Promise.all([
       this.userModel.find().skip(skip).limit(query.limit).exec(),

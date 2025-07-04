@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
-import { CommentRepoService } from './comment.repo.service';
+import { CommentRepo } from './CommentRepo.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Comment, CommentSchema } from './comment.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from 'src/jwt.strategy';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]), JwtModule.register({
@@ -21,7 +22,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   })],
   controllers: [CommentController],
-  providers: [CommentService, CommentRepoService],
+  providers: [CommentService, CommentRepo, JwtStrategy],
 })
 export class CommentModule { }
-

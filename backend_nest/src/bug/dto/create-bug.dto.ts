@@ -1,20 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsNotEmpty } from "class-validator";
 import { IsEnum, IsString } from 'class-validator';
-
-export enum Severity {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  SEVERE = 'severe',
-}
-
-export enum Status {
-  OPEN = 'open',
-  IN_PROGRESS = 'in-progress',
-  RESOLVED = 'resolved',
-  POSTPONED = 'postponed',
-}
+import { Severity, Status } from "../bugEnums";
 
 export class CreateBugDto {
   @ApiProperty()

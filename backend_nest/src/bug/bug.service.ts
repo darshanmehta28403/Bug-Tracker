@@ -1,64 +1,54 @@
-import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  InternalServerErrorException
+} from '@nestjs/common';
+import { isValidObjectId } from 'mongoose';
 import { CreateBugDto } from './dto/create-bug.dto';
 import { UpdateBugDto } from './dto/update-bug.dto';
-import { isValidObjectId } from 'mongoose';
-import { BugRepoService } from './bug.repo.service';
+import { PaginationDto } from './dto/pagination.dto';
+
+import { BugRepo } from './BugRepo.repository';
 
 @Injectable()
 export class BugService {
-  constructor(private repo: BugRepoService) { }
+  constructor(private readonly repo: BugRepo) { }
 
-  async findBugById(id: string): Promise<any> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException('Invalid Bug ID Format');
-    }
-
-    const Bug = await this.repo.findById(id);
-    if (!Bug) {
-      throw new NotFoundException('Bug not found');
-    }
-
-    return Bug;
+  async findBugById(id: string) {
+    if (!isValidObjectId(id)) throw new BadRequestException('Invalid Bug ID Format');
+    const bug = await this.repo.findById(id);
+    if (!bug) throw new NotFoundException('Bug not found');
+    return bug;
   }
 
-  async findAllBugs(query: any): Promise<any> {
+  async findAllBugs(query: PaginationDto) {
     try {
-      const result = await this.repo.findAllPaginated(query);
-      return result;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message || 'Failed to fetch Bugs');
+      return await this.repo.findAllPaginated(query);
+    } catch (err) {
+      throw new InternalServerErrorException(err.message || 'Fetch failed');
     }
   }
 
-  async createBug(Bug: CreateBugDto): Promise<any> {
+  async createBug(data: CreateBugDto) {
     try {
-      const created = await this.repo.create(Bug);
-      return created;
-    } catch (error) {
-      throw new InternalServerErrorException(error.message || 'Bug creation failed');
+      return await this.repo.create(data);
+    } catch (err) {
+      throw new InternalServerErrorException(err.message || 'Creation failed');
     }
   }
 
-  async updateBug(id: string, updatedData: UpdateBugDto): Promise<any> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException('Invalid Bug ID format');
-    }
-    const updated = await this.repo.update(id, updatedData);
-    if (!updated) {
-      throw new NotFoundException('Bug not found');
-    }
-    return updated;
+  async updateBug(id: string, updated: UpdateBugDto) {
+    if (!isValidObjectId(id)) throw new BadRequestException('Invalid ID');
+    const result = await this.repo.update(id, updated);
+    if (!result) throw new NotFoundException('Not found');
+    return result;
   }
 
-  async deleteBug(id: string): Promise<any | null> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException('Invalid Bug ID format');
-    }
-
-    const deleted = await this.repo.delete(id);
-    if (!deleted) {
-      throw new NotFoundException('Bug not found');
-    }
-    return deleted;
+  async deleteBug(id: string) {
+    if (!isValidObjectId(id)) throw new BadRequestException('Invalid ID');
+    const result = await this.repo.delete(id);
+    if (!result) throw new NotFoundException('Not found');
+    return result;
   }
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Severity, Status } from './bugEnums';
 
 export type BugDocument = Bug & Document;
 
@@ -16,14 +17,14 @@ export class Bug {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   description: string;
 
-  @Prop({ required: true, enum: ['low', 'mid', 'high', 'severe'], lowercase: true, default: 'low' })
-  severity: string;
+  @Prop({ required: true, enum: Severity, default: Severity.LOW })
+  severity: Severity;
 
-  @Prop({ required: true, enum: ['open', 'in-progress', 'resolved', 'postponed'], lowercase: true, default: 'open' })
-  status: string;
+  @Prop({ required: true, enum: Status, default: Status.OPEN })
+  status: Status;
 
   @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId;

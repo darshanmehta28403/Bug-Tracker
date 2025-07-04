@@ -16,7 +16,7 @@ export class Project {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   description: string;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], required: true })
