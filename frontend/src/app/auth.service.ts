@@ -48,4 +48,6 @@ export class AuthService {
     this.admin = false;
   }
 
+  //Changes done here for practice...
+
 }
