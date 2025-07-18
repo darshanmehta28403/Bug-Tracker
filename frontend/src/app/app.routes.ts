@@ -63,7 +63,7 @@ export const routes: Routes = [
         component: AdminPanelComponent,
         canActivate: [AdminGuard]
     },
-    //Changes here....
+    //Changes here in sub-branch....
 ];
 
 
