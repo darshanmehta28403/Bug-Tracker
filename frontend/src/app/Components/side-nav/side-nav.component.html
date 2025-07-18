@@ -4,10 +4,11 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
       <mat-toolbar class="text-white">Menu</mat-toolbar>
       <mat-nav-list>
-        <a class="d-block p-3 text-decoration-none" routerLink="/">Home</a>
         <a class="d-block p-3 text-decoration-none" routerLink="/bugs">Bugs</a>
-        <a class="d-block p-3 text-decoration-none" routerLink="/project">Projects</a>
+        <a class="d-block p-3 text-decoration-none" routerLink="/">Projects</a>
         <a class="d-block p-3 text-decoration-none" routerLink="/user">Users</a>
+        <a class="d-block p-3 text-decoration-none" *ngIf="isAdmin" routerLink="/adminPanel">Admin Panel</a>
+        <a class="d-block p-3 text-decoration-none" *ngIf="isAdmin" routerLink="/dasbboard">Dashboard</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -20,7 +21,8 @@
           </div>
           <div class="col-6 d-flex justify-content-end">
             <button class="btn text-white">
-              <mat-icon *ngIf="isLoggedIn" aria-hidden="false" aria-label="Example home icon" fontIcon="person" routerLink="/profile"></mat-icon>
+              <mat-icon *ngIf="isLoggedIn" aria-hidden="false" aria-label="Example home icon" fontIcon="person"
+                routerLink="/profile"></mat-icon>
               <span *ngIf="!isLoggedIn" routerLink="/signin">Login</span>
             </button>
           </div>

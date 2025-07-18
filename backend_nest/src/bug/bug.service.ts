@@ -8,11 +8,12 @@ import { isValidObjectId } from 'mongoose';
 import { CreateBugDto } from './dto/create-bug.dto';
 import { UpdateBugDto } from './dto/update-bug.dto';
 import { PaginationDto } from './dto/pagination.dto';
-
 import { BugRepo } from './BugRepo.repository';
+import { AppEventEmitter } from '../event.emitter.provider';
 
 @Injectable()
 export class BugService {
+
   constructor(private readonly repo: BugRepo) { }
 
   async findBugById(id: string) {
@@ -31,11 +32,12 @@ export class BugService {
   }
 
   async createBug(data: CreateBugDto) {
-    try {
-      return await this.repo.create(data);
-    } catch (err) {
-      throw new InternalServerErrorException(err.message || 'Creation failed');
+    const result = await this.repo.create(data);
+    if (!result) {
+      throw new NotFoundException('Not found')
     }
+    AppEventEmitter.emit('broadcast-counts');
+    return result;
   }
 
   async updateBug(id: string, updated: UpdateBugDto) {
@@ -49,6 +51,7 @@ export class BugService {
     if (!isValidObjectId(id)) throw new BadRequestException('Invalid ID');
     const result = await this.repo.delete(id);
     if (!result) throw new NotFoundException('Not found');
+    AppEventEmitter.emit('broadcast-counts');
     return result;
   }
 }

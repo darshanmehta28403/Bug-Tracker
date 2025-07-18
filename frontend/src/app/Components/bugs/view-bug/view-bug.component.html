@@ -1,0 +1,49 @@
+<mat-card *ngIf="bug" class="bug-details p-4">
+  <div class="row m-0">
+    <div class="col-10">
+      <h2>{{ bug.title }}</h2>
+    </div>
+    <div class="col-2">
+      <button [routerLink]="['/addBug', bug.id]" class="btn text-white">Edit</button>
+    </div>
+  </div>
+  <p>{{ bug.description }}</p>
+  <p><strong>Status:</strong> {{ bug.status }}</p>
+  <p><strong>Created by:</strong> {{ bug.reportedBy?.name }}</p>
+</mat-card>
+
+<!-- Comments Section -->
+<mat-card class="comments-section p-4 mt-4">
+  <h3>Comments</h3>
+
+  <!-- Comment Input -->
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()" class="mb-3">
+    <mat-form-field appearance="outline" class="w-100">
+      <textarea matInput formControlName="text" rows="3" placeholder="Add Comment"></textarea>
+    </mat-form-field>
+    <div class="text-end">
+      <button class="btn btn-success" color="primary" type="submit" [disabled]="!commentForm.valid">
+        {{ editingCommentId ? 'Update' : 'Post' }}
+      </button>
+      <button class="btn btn-danger ms-2" *ngIf="editingCommentId" type="button" (click)="cancelEdit()">Cancel</button>
+    </div>
+  </form>
+
+  <!-- Comments List -->
+  <div *ngIf="comments.length === 0">No comments yet.</div>
+
+  <div *ngFor="let comment of comments" class="comment mt-3 p-2 border rounded bg-light">
+    <div class="d-flex justify-content-between align-items-center">
+      <span><strong>{{ comment.author?.name }}</strong></span>
+      <span class="text-muted small">{{ comment.createdAt | date:'short' }}</span>
+    </div>
+
+    <p class="mb-1">{{ comment.text }}</p>
+
+    <!-- Action Buttons -->
+    <div *ngIf="canEditOrDeleteComment(comment)" class="text-end">
+      <button class="btn btn-success" color="primary" (click)="editComment(comment)">Edit</button>
+      <button class="btn btn-danger ms-2" color="warn" (click)="deleteComment(comment)">Delete</button>
+    </div>
+  </div>
+</mat-card>

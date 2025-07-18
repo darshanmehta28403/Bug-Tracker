@@ -1,1 +1,27 @@
-<p>users works!</p>
+<mat-card class="p-4 mat-elevation-z4">
+  <h2 class="mb-3">User List</h2>
+  <table class="w-100 custom-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Designation</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.designation }}</td>
+        <td>
+          <span class="role-badge" [ngClass]="user.role.toLowerCase()">
+            {{ user.role }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-card>

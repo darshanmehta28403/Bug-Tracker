@@ -1,0 +1,33 @@
+<form [formGroup]="userForm" (ngSubmit)="submit()" class="p-4">
+  <mat-form-field class="w-100">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field class="w-100">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field class="w-100">
+    <mat-label>Username</mat-label>
+    <input matInput formControlName="username" />
+  </mat-form-field>
+
+  <!-- Only visible if admin -->
+  <ng-container *ngIf="isAdmin">
+    <mat-form-field class="w-100">
+      <mat-label>Designation</mat-label>
+      <input matInput formControlName="designation" />
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <button class="btn text-white mt-2" [disabled]="userForm.invalid">Update User</button>
+</form>

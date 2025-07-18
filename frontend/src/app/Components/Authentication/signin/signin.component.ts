@@ -25,7 +25,7 @@ import { AuthService } from '../../../auth.service';
     NgIf,
     MatButtonModule,
     RouterModule
-],
+  ],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss',
 })
@@ -49,9 +49,9 @@ export class SigninComponent {
       username: this.loginForm.value.username,
       password: this.loginForm.value.password
     }
-    this.bugTracker.loginAuth(data).subscribe((res)=>{
-      if(res.status>=200 && res.status<300){
-        this.auth.login(res.data.user);
+    this.bugTracker.loginAuth(data).subscribe((res) => {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        this.auth.login(res.data);
         this.router.navigate(['']);
       }
     })

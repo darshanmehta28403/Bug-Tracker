@@ -18,7 +18,7 @@ import { BugTrackerService } from '../../../bug-tracker.service';
 @Component({
   selector: 'app-register',
   imports: [
-    FormsModule,  
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
@@ -47,8 +47,8 @@ export class RegisterComponent implements OnInit {
         ],
       ],
       username: ['', Validators.required],
-      role: [],
-      type: [],
+      role: [''],
+      type: [''],
     });
   }
 
@@ -83,19 +83,20 @@ export class RegisterComponent implements OnInit {
   }
 
   submitForm() {
-    this.regForm.get('role')?.setValue("SDE Intern");
-    this.regForm.get('type')?.setValue("intern");
-    this.bugTracker.postUser(this.regForm.value).subscribe((res)=>{
-        console.log(res.status);
-      if(res.status>=200 && res.status<300){
+    this.regForm.value.designation = "SDE Intern";
+    this.regForm.value.role = "intern";
+    console.log("Reached:", this.regForm.value);
+    this.bugTracker.postUser(this.regForm.value).subscribe((res) => {
+      console.log(res.status);
+      if (res.statusCode >= 200 && res.statusCode < 300) {
         console.log("reached");
         this.bugTracker.openDialogue("Request Succesfull");
       }
-      else{
+      else {
         this.bugTracker.openDialogue("Request Failed");
       }
-    });   
+    });
   }
-    
+
 }
 

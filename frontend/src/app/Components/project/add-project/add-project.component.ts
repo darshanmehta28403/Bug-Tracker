@@ -4,11 +4,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
   FormBuilder,
-  FormGroup,
-  AbstractControl,
-  ValidatorFn,
-  ValidationErrors,
-  Form,
+  FormGroup
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +12,7 @@ import { BugTrackerService } from '../../../bug-tracker.service';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule, NgIf } from '@angular/common';
 import { AuthService } from '../../../auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-project',
@@ -34,34 +31,69 @@ import { AuthService } from '../../../auth.service';
 })
 export class AddProjectComponent implements OnInit {
   projectForm: FormGroup;
-
   userData: any = [];
+  projectId: string | null = null;
+  isEdit = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private bugTracker: BugTrackerService,
-    private auth: AuthService
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.projectForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       members: [''],
-      createdBy: [JSON.parse(localStorage.getItem('user') ?? '{}')._id]
+      createdBy: [JSON.parse(localStorage.getItem('user') ?? '{}').user.id]
     });
   }
 
   ngOnInit(): void {
+    // Get users
     this.bugTracker.getUser().subscribe((res) => {
-      this.userData = res?.data;
+      this.userData = res?.data.users;
+    });
+
+    // Check if this is edit mode
+    this.projectId = this.route.snapshot.paramMap.get('id');
+    if (this.projectId) {
+      this.isEdit = true;
+      this.loadProject(this.projectId);
+    }
+  }
+
+  loadProject(id: string) {
+    this.bugTracker.getProjectById(id).subscribe((res) => {
+      const p = res.data;
+
+      this.projectForm.patchValue({
+        name: p.name,
+        description: p.description,
+        members: p.members.map((m: any) => m.id),
+        createdBy: p.createdBy?.id || ''
+      });
     });
   }
 
   onSubmit() {
-    console.log("Project value: ",this.projectForm.value);
-    this.bugTracker.postProject(this.projectForm.value).subscribe((res)=>{
-      if(res.status>=200 && res.status<300){
-        this.bugTracker.openDialogue("Project Created Successfully !!");
-      } 
-    })
+    const formData = this.projectForm.value;
+
+    if (this.isEdit && this.projectId) {
+      console.log("FormData: ", formData);
+      this.bugTracker.updateProject(this.projectId, formData).subscribe(() => {
+        this.bugTracker.openDialogue("Project Updated Successfully !!");
+        this.router.navigate(['/projects']);
+      });
+    } else {
+      this.bugTracker.postProject(formData).subscribe((res) => {
+        if (res.status >= 200 && res.status < 300) {
+          this.bugTracker.openDialogue("Project Created Successfully !!");
+          this.router.navigate(['/projects']);
+        }
+      });
+    }
   }
 }
+

@@ -8,12 +8,13 @@ import { hashPassword, comparePassword } from './user.util';
 import { PaginationDto } from './dto/pagination.dto';
 import { UserRepo } from './UserRepo.repository';
 import * as nodemailer from 'nodemailer';
+import { AppEventEmitter } from '../event.emitter.provider';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly repo: UserRepo,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) { }
 
   async findUserById(id: string): Promise<any> {
@@ -38,7 +39,6 @@ export class UserService {
 
   async createUser(user: CreateUserDto): Promise<any> {
     try {
-      user.plainPassword = user.password;
       user.password = await hashPassword(user.password);
       const { username } = user;
       const validUsername = await this.repo.findOne({ username });
@@ -51,6 +51,7 @@ export class UserService {
         throw new NotAcceptableException('Username Already Exists !!')
       }
       const created = await this.repo.create(user);
+      AppEventEmitter.emit('broadcast-counts');
       return created;
     } catch (error) {
       throw new InternalServerErrorException(error.message || 'User creation failed');
@@ -82,6 +83,7 @@ export class UserService {
     if (!updated) {
       throw new NotFoundException('User not found');
     }
+    AppEventEmitter.emit('broadcast-counts');
     return updated;
   }
 
@@ -93,6 +95,7 @@ export class UserService {
     if (!deleted) {
       throw new NotFoundException('User not found');
     }
+    AppEventEmitter.emit('broadcast-counts');
     return deleted;
   }
 
@@ -119,7 +122,7 @@ export class UserService {
       throw new NotFoundException('Username Not Found !!');
     }
     const id = user.id;
-    const link = `http://localhost:4200/resetPassowrdTab/${id}`
+    const link = `http://localhost:4200/editPassword/${id}`
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {

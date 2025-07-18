@@ -1,0 +1,24 @@
+.bug-details {
+  margin-bottom: 2rem;
+}
+
+.comments-section {
+  .comment {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.5rem 0;
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .comment-body {
+      margin-top: 0.3rem;
+    }
+  }
+}
+
+.btn.text-white {
+  background-color: #1ab394;
+}

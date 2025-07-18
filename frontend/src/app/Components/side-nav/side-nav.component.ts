@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { AuthService } from '../../auth.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-side-nav',
@@ -25,7 +24,7 @@ import { NgIf } from '@angular/common';
     AsyncPipe,
     RouterOutlet,
     RouterModule,
-    NgIf
+    CommonModule
   ],
 })
 export class SideNavComponent implements OnInit {
@@ -33,12 +32,14 @@ export class SideNavComponent implements OnInit {
   private auth = inject(AuthService);
 
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   ngOnInit(): void {
     this.auth.isLoggedIn$.subscribe((res) => {
       this.isLoggedIn = res;
     });
-    console.log("LoggedIN ? ",this.isLoggedIn);
+    this.isAdmin = this.auth.admin;
+    console.log("IsAdmin ? ", this.isAdmin);
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver

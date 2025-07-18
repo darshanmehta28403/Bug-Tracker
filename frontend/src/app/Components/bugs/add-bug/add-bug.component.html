@@ -1,0 +1,42 @@
+<mat-card class="p-4">
+  <h2>{{ isEdit ? 'Edit Bug' : 'Add New Bug' }}</h2>
+  <form [formGroup]="bugForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="mb-3 w-100">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="mb-3 w-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="4"></textarea>
+    </mat-form-field>
+
+    <!-- Show Status field only in Edit mode -->
+    <mat-form-field appearance="outline" class="mb-3 w-100">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status" [disabled]="!isEdit">
+        <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Severity -->
+    <mat-form-field appearance="outline" class="mb-3 w-100">
+      <mat-label>Severity</mat-label>
+      <mat-select formControlName="severity">
+        <mat-option *ngFor="let sev of severities" [value]="sev">{{ sev }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="mb-3 w-100">
+      <mat-label>Project</mat-label>
+      <mat-select formControlName="project">
+        <mat-option *ngFor="let p of projects" [value]="p.id">{{ p.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="text-right">
+      <button mat-flat-button color="primary" [disabled]="bugForm.invalid">{{ isEdit ? 'Update' : 'Submit' }}</button>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,39 @@
+<mat-card class="p-4">
+  <h2 class="mb-3">User Management</h2>
+  <table class="user-table w-100 mat-elevation-z8">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Designation</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.designation }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+              'admin': user.role === 'admin',
+              'developer': user.role === 'developer',
+              'intern': user.role === 'intern',
+              'qa': user.role === 'qa'
+          }">{{ user.role }}</span>
+        </td>
+        <td>
+          <button class="btn btn-success" (click)="editUser(user)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="btn btn-danger mt-3" (click)="deleteUser(user.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-card>

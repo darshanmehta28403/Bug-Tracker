@@ -1,17 +1,36 @@
-<div>
-    <div>
-        <h2>{{projectDetails.name}}</h2>
-        <h4 class="fw-normal">{{projectDetails.description}}</h4>
-        <hr>
+<!-- Project Details -->
+<div class="project-details" *ngIf="project">
+    <div class="row m-0">
+        <div class="col-11">
+            <h2>{{ project.name }}</h2>
+        </div>
+        <div class="col-1">
+            <button class="btn text-white" [routerLink]="['/addProject', project.id]">Edit</button>
+        </div>
     </div>
-    <div>
-        <h3>Members: </h3>
-        <div *ngFor="let data of projectDetails.members">
-            <div class="row m-0 mt-3">
-                <div class="col-6">
-                    <h5 class="fw-normal">{{data.name}}</h5>
-                </div>
-            </div>
+    <p>{{ project.description }}</p>
+</div>
+
+<!-- Bugs Table -->
+<div class="project-bugs" *ngIf="bugs.length > 0">
+    <h3>Bugs</h3>
+    <div *ngFor="let bug of bugs">
+        <div class="bg-light p-3 mt-3">
+            <h5 class="m-0 mb-2">{{bug.title}}</h5>
+            <p>{{bug.description}}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Project Members -->
+<div *ngIf="project?.members?.length > 0" class="mt-3">
+    <h3>Members:</h3>
+    <div *ngFor="let member of project.members" class="row m-0 mt-3 align-items-center">
+        <div class="col-6">
+            <h5 class="fw-normal">{{ member.name }}</h5>
+        </div>
+        <div class="col-6 text-end" *ngIf="isAdmin">
+            <button class="btn btn-danger" color="warn" (click)="removeMember(member.id)">Remove</button>
         </div>
     </div>
 </div>

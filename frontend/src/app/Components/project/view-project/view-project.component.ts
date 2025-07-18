@@ -1,27 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BugTrackerService } from '../../../bug-tracker.service';
-import { CommonModule, NgFor } from '@angular/common';
 import { AuthService } from '../../../auth.service';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-view-project',
-  imports: [CommonModule, NgFor],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NgIf,
+    NgFor,
+    RouterLink,
+    MatTableModule
+  ],
   templateUrl: './view-project.component.html',
   styleUrl: './view-project.component.scss'
 })
 export class ViewProjectComponent implements OnInit {
-
-  projectDetails: any;
+  project: any;
+  bugs: any[] = [];
   isAdmin?: boolean;
+  displayedColumns: string[] = ['title', 'status', 'actions'];
 
-  constructor(private route: ActivatedRoute, private bugTracker: BugTrackerService, private auth: AuthService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private bugService: BugTrackerService,
+    private auth: AuthService
+  ) { }
 
   ngOnInit(): void {
-    console.log("ProjectId: ", this.route.snapshot.paramMap.get('id'));
-    this.bugTracker.getProjectById(this.route.snapshot.paramMap.get('id')!).subscribe((res) => {
-      this.projectDetails = res.data;
-    });
+    const projectId = this.route.snapshot.paramMap.get('id')!;
     this.isAdmin = this.auth.admin;
+
+    // Fetch project
+    this.bugService.getProjectById(projectId).subscribe((res) => {
+      this.project = res.data;
+    });
+
+    // Fetch only bugs of this project
+    this.bugService.getBugs().subscribe((res: any) => {
+      this.bugs = res.data.Bugs.filter((bug: any) => bug.project?.id === projectId);
+    });
+  }
+
+  removeMember(memberId: string) {
+    if (!this.project?.id) return;
+    this.bugService.deleteProjectMember(this.project.id, memberId).subscribe(() => {
+      this.project.members = this.project.members.filter((m: any) => m._id !== memberId);
+    });
   }
 }

@@ -6,6 +6,7 @@ import { UpdateBugDto } from './dto/update-bug.dto';
 import { PaginationDto } from './dto/pagination.dto';
 
 export class BugRepo {
+
   constructor(@InjectModel(Bug.name) private bugModel: Model<BugDocument>) { }
 
   async findAllPaginated(query: PaginationDto) {
@@ -30,7 +31,9 @@ export class BugRepo {
 
   async create(BugData: CreateBugDto) {
     const newBug = new this.bugModel(BugData);
-    return newBug.save();
+    const bug = await newBug.save();
+    this.findAllPaginated({ page: 0, limit: 0 });
+    return bug;
   }
 
   async update(id: string, updatedData: UpdateBugDto) {

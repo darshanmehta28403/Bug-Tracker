@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -10,37 +11,37 @@ export class AuthService {
   public user$ = this._user$.asObservable();
   public admin: boolean = false;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const storedUser = localStorage.getItem('user');
-    if(storedUser){
+    if (storedUser) {
       this.loggedIn.next(true);
       this._user$.next(JSON.parse(storedUser));
-      this.isAdmin(JSON.parse(storedUser));
+      this.isAdmin(JSON.parse(storedUser).user);
     }
   }
 
-  isAdmin(user: any): boolean{
-    if(user?.type === 'admin'){
+  isAdmin(user: any): boolean {
+    if (user?.role === 'admin') {
       this.admin = true;
     }
-    else{
+    else {
       this.admin = false;
     }
     return this.admin;
   }
 
-  get isLoggedIn$(): Observable<boolean>{
+  get isLoggedIn$(): Observable<boolean> {
     return this.loggedIn.asObservable();
   }
 
-  login(user: any){
-    localStorage.setItem('user',JSON.stringify(user));
+  login(user: any) {
+    localStorage.setItem('user', JSON.stringify(user));
     this._user$.next(user);
     this.loggedIn.next(true);
     this.isAdmin(user);
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem('user');
     this.loggedIn.next(false);
     this._user$.next(null);
